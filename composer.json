@@ -1,24 +1,24 @@
 {
-    "name": "slowlyo/owl-admin",
+    "name": "ufucms/ufu-admin",
     "description": "基于 laravel、amis 开发的后台框架~",
     "license": "MIT",
     "authors": [
         {
-            "name": "slowlyo",
-            "email": "slowlyo_email@qq.com",
-            "homepage": "https://github.com/slowlyo"
+            "name": "ufucms",
+            "email": "ufucms@ufucms.com",
+            "homepage": "https://github.com/ufucms"
         }
     ],
-    "homepage": "https://github.com/slowlyo/owl-admin",
+    "homepage": "https://github.com/ufucms/ufu-admin",
     "support": {
-        "email": "slowlyo_email@qq.com",
-        "issues": "https://github.com/Slowlyo/owl-admin/issues",
-        "forum": "https://github.com/orgs/owl-admin/discussions",
+        "email": "ufucms@ufucms.com",
+        "issues": "https://github.com/ufucms/ufucms/issues",
+        "forum": "https://github.com/orgs/ufucms/discussions",
         "wiki": "https://doc.owladmin.com/"
     },
     "keywords": [
         "laravel",
-        "owl-admin",
+        "ufu-admin",
         "admin",
         "amis"
     ],
