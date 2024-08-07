@@ -1,40 +1,12 @@
 <div align="center">
     <br/>
-    <img src="https://doc.owladmin.com/static/images/demo/logo.png" alt="" />
+    <img src="./admin-views/public/logo.png" alt="" />
     <h1 align="center">
-        Owl Admin
+        UFU Admin
     </h1>
     <h4 align="center">
         快速且灵活的后台框架
     </h4> 
-
-[官网](https://owladmin.com) | [Demo](http://demo.owladmin.com) | [Github](https://github.com/Slowlyo/owl-admin) | [Gitee](https://gitee.com/slowlyo/owl-admin) | [文档](http://doc.owladmin.com) | [加群](https://jq.qq.com/?_wv=1027&k=5La4Ir6c)
-
-</div>
-
-<p align="center">
-    <a href="https://www.php.net/">
-        <img src="https://img.shields.io/badge/PHP-8.0%2B-%23268af1" alt="">
-    </a>
-&nbsp;
-    <a href="https://laravel.com/">
-        <img src="https://img.shields.io/badge/Laravel-9.0%2B-%23268af1" alt="">
-    </a>
-&nbsp;
-      <a href="https://aisuda.bce.baidu.com/amis/zh-CN/docs/index">
-        <img src="https://img.shields.io/badge/Amis-3.0%2B-%23268af1" alt="">
-    </a>
-&nbsp;
-      <a href="https://packagist.org/packages/slowlyo/owl-admin">
-        <img src="https://img.shields.io/badge/license-MIT-%23268af1" alt="">
-    </a>
-</p>
-
-<br>
-
-<div align="center">
-  <img  width="92%" style="border-radius:4px;margin-top:20px;margin-bottom:20px;box-shadow: 2px 0 6px gray;" src="https://doc.owladmin.com/static/images/demo/home.png" />
-</div>
 <br>
 
 ### 项目介绍
@@ -65,17 +37,10 @@
 
 <br>
 
-### 截图
-
-![登录](https://doc.owladmin.com/static/images/demo/login.png)
-![首页](https://doc.owladmin.com/static/images/demo/home.png)
-![可视化编辑器](https://doc.owladmin.com/static/images/demo/editor.png)
-
-<br>
 
 ### 安装
 
-> 👉 __注意: `OwlAdmin` 是 `laravel` 的扩展包, 安装前请确保你会使用 `laravel`__
+> 👉 __注意: `UfuAdmin` 是 `laravel` 的扩展包, 安装前请确保你会使用 `laravel`__
 
 ##### 1. 创建 `laravel` 项目
 
@@ -87,20 +52,35 @@ composer create-project laravel/laravel example-app
 
 ```dotenv
 # .env
+
+APP_TIMEZONE=Asia/Shanghai
+
+APP_LOCALE=zh_CN
+
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=owl_admin
+DB_DATABASE=ufucms
 DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-> 如果你使用的是 laravel 11 , 还需要执行: `php artisan install:api`
-
-##### 3. 获取 `Owl Admin`
+> 如果使用的是MySQL的utf8mb4字符集，需要在文件`app\Providers\AppServiceProvider.php`中增加以下代码
 
 ```shell
-composer require slowlyo/owl-admin
+    public function boot(): void
+    {
+        \Schema::defaultStringLength(191);
+    }
+```
+
+
+> 如果你使用的是 laravel 11 , 还需要执行: `php artisan install:api`
+
+##### 3. 获取 `UFU Admin`
+
+```shell
+composer require ufucms/ufu-admin:dev-master
 ```
 
 ##### 4. 安装
@@ -119,28 +99,6 @@ _初始账号密码都是 `admin`_
 
 <br>
 
-### 小白入门视频
-
-[![入门视频](https://doc.owladmin.com/static/images/demo/video.png)](https://www.bilibili.com/video/BV18w411X7BG)
-
 <br>
 
-### 支持项目
-
-你可以通过以下方式支持项目:
-
-- 报告 Bug
-- 提交 PR
-  - 参见 [贡献文档](https://github.com/Slowlyo/owl-admin/blob/master/CONTRIBUTING.md)
-- 点点 Star 
-    - 如果觉得项目不错，或者已经在使用了，希望你可以去 [Github](https://github.com/Slowlyo/owl-admin)
-或者 [Gitee](https://gitee.com/slowlyo/owl-admin) 帮我们点个 ⭐ Star，这将是对我们极大的鼓励与支持。
-
-[![Stargazers over time](https://starchart.cc/Slowlyo/owl-admin.svg?variant=adaptive)](https://github.com/Slowlyo/owl-admin)
-
-<br>
-<br>
-
-感谢 [__JetBrains__](https://jb.gg/OpenSourceSupport) 提供的 `IDE` 支持
-
-<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png?_gl=1*cg0jw0*_ga*NTA2ODgwODQyLjE2NTU3MzAyNTI.*_ga_9J976DJZ68*MTY4NTUzNjY1Ny4xMS4xLjE2ODU1MzY2NjAuMC4wLjA.&_ga=2.105214851.1872617824.1685460785-506880842.1655730252" width="50px">
+感谢 [__Slowlyo__](https://github.com/slowlyo) 开源[__owl-admin__](https://github.com/Slowlyo/owl-admin)项目，使得[__ufu-admin__](https://github.com/ufucms/ufu-admin)可以站在巨人的肩膀上剑指苍穹。

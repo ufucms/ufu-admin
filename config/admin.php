@@ -2,7 +2,7 @@
 
 return [
     // 应用名称
-    'name'           => env('ADMIN_APP_NAME', 'Owl Admin'),
+    'name'           => env('ADMIN_APP_NAME', 'Ufu Admin'),
 
     // 应用 logo
     'logo'           => env('ADMIN_LOGO', '/admin-assets/logo.png'),
@@ -80,7 +80,7 @@ return [
 
     'layout' => [
         // 浏览器标题, 功能名称使用 %title% 代替
-        'title'              => env('ADMIN_SITE_TITLE', '%title% | OwlAdmin'),
+        'title'              => env('ADMIN_SITE_TITLE', '%title% | Ufu Admin'),
         'header'             => [
             // 是否显示 [刷新] 按钮
             'refresh'       => env('ADMIN_HEADER_REFRESH', true),
@@ -109,7 +109,7 @@ return [
          */
         'keep_alive_exclude' => [],
         // 底部信息
-        'footer'             => '<a href="https://github.com/slowlyo/owl-admin" target="_blank">Owl Admin</a>',
+        'footer'             => '<a href="https://github.com/ufucms/ufu-admin" target="_blank">Ufu Admin</a>',
     ],
 
     'database' => [
