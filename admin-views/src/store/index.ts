@@ -3,11 +3,11 @@ import {getCacheKey, mergeObject} from '@/utils/common'
 // 默认设置
 const defaultSettings = {
     darkTheme: false,
-    footer: false,
+    footer: true,
     breadcrumb: true,
     themeColor: '#1677ff',
     layoutMode: 'default',
-    siderTheme: 'light',
+    siderTheme: 'dark',
     topTheme: 'light',
     animateInType: 'alpha',
     animateInDuration: 600,
@@ -15,9 +15,9 @@ const defaultSettings = {
     animateOutDuration: 600,
     loginTemplate: 'default',
     keepAlive: false,
-    enableTab: false,
+    enableTab: true,
     tabIcon: true,
-    accordionMenu: false,
+    accordionMenu: true,
 }
 
 // 默认 token

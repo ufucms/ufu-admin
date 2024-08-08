@@ -8,17 +8,25 @@ use Slowlyo\OwlAdmin\Support\Cores\Database;
 
 class InitCommand extends Command
 {
-    protected $signature = 'admin-module:init {module*}';
+    protected $signature = 'admin-module:init {module*} {--username=} {--password=}';
 
     protected $description = 'Init Admin Module';
 
     protected string $module;
+
+    protected string $username;
+
+    protected string $password;
 
     protected string $directory;
 
     public function handle(): void
     {
         $modules = $this->checkOption();
+
+        $this->username = $this->option('username');
+
+        $this->password = $this->option('password');
 
         foreach ($modules as $module) {
             $this->module = $module;
@@ -34,7 +42,7 @@ class InitCommand extends Command
         $prefix = rtrim($this->getLowerName(), '_') . '_';
 
         Database::make($prefix)->initSchema();
-        Database::make($prefix)->fillInitialData();
+        Database::make($prefix)->fillInitialData($this->username, $this->password);
     }
 
     public function checkOption()
@@ -107,11 +115,11 @@ class InitCommand extends Command
 
     public function createAuthController(): void
     {
-        $path = $this->getPath('/Controllers/AuthController.php');
+        $path = $this->getPath('/Http/Controllers/AuthController.php');
 
         $this->laravel['files']->put(
             $path,
-            str_replace('{{Namespace}}', $this->getNamespace('Controllers'), $this->getStub('AuthController'))
+            str_replace('{{Namespace}}', $this->getNamespace('Http\Controllers'), $this->getStub('AuthController'))
         );
 
         $this->line('<info>AuthController file was created:</info> ' . str_replace(base_path(), '', $path));
@@ -140,7 +148,7 @@ class InitCommand extends Command
         $path = $this->getPath('/routes.php');
 
         $content = $this->getStub('routes');
-        $content = str_replace('{{Namespace}}', $this->getNamespace('Controllers'), $content);
+        $content = str_replace('{{Namespace}}', $this->getNamespace('Http\Controllers'), $content);
         $content = str_replace('{{module}}', $this->getLowerName(), $content);
 
         $this->laravel['files']->put($path, $content);
@@ -150,11 +158,11 @@ class InitCommand extends Command
 
     public function createHomeController(): void
     {
-        $path = $this->getPath('/Controllers/HomeController.php');
+        $path = $this->getPath('/Http/Controllers/HomeController.php');
 
         $this->laravel['files']->put(
             $path,
-            str_replace('{{Namespace}}', $this->getNamespace('Controllers'), $this->getStub('HomeController'))
+            str_replace('{{Namespace}}', $this->getNamespace('Http\Controllers'), $this->getStub('HomeController'))
         );
 
         $this->line('<info>HomeController file was created:</info> ' . str_replace(base_path(), '', $path));
@@ -162,11 +170,11 @@ class InitCommand extends Command
 
     public function createSettingController()
     {
-        $path = $this->getPath('/Controllers/SettingController.php');
+        $path = $this->getPath('/Http/Controllers/SettingController.php');
 
         $this->laravel['files']->put(
             $path,
-            str_replace('{{Namespace}}', $this->getNamespace('Controllers'), $this->getStub('SettingController'))
+            str_replace('{{Namespace}}', $this->getNamespace('Http\Controllers'), $this->getStub('SettingController'))
         );
 
         $this->line('<info>SettingController file was created:</info> ' . str_replace(base_path(), '', $path));
@@ -182,7 +190,7 @@ class InitCommand extends Command
         $content = str_replace('{{bootstrap}}', 'base_path(\'' . $_path . '\')', $contents);
         $content = str_replace('{{route_prefix}}', $this->getLowerName() . '-api', $content);
         $content = str_replace('{{module_name}}', $this->getLowerName(), $content);
-        $content = str_replace('{{route_namespace}}', $this->getNamespace('Controllers'), $content);
+        $content = str_replace('{{route_namespace}}', $this->getNamespace('Http\Controllers'), $content);
         $content = str_replace('{{model_namespace}}', $this->getNamespace('Models'), $content);
 
         $this->laravel['files']->put($path, $content);

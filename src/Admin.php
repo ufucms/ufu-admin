@@ -222,7 +222,7 @@ class Admin
         if (is_file(public_path('admin-assets/index.html'))) {
             $view = file_get_contents(public_path('admin-assets/index.html'));
         } else {
-            $view = file_get_contents(base_path('vendor/slowlyo/owl-admin/admin-views/dist/index.html'));
+            $view = file_get_contents(base_path('vendor/ufucms/ufu-admin/admin-views/dist/index.html'));
         }
 
         $logoPath = self::config('admin.logo');
@@ -250,6 +250,6 @@ class Admin
 
     public static function version()
     {
-        return Composer::getVersion('slowlyo/owl-admin');
+        return Composer::getVersion('ufucms/ufu-admin');
     }
 }

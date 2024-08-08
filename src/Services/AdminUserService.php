@@ -102,9 +102,9 @@ class AdminUserService extends AdminService
 
         $query = $this->query()
             ->with('roles')
-            ->select(['id', 'name', 'username', 'avatar', 'enabled', 'created_at'])
+            ->select(['id', 'name', 'username', 'mobile', 'gender', 'birthday', 'email', 'avatar', 'enabled', 'reason', 'created_at', 'updated_at'])
             ->when($keyword, function ($query) use ($keyword) {
-                $query->where('username', 'like', "%{$keyword}%")->orWhere('name', 'like', "%{$keyword}%");
+                $query->where('username', 'like', "%{$keyword}%")->orWhere('name', 'like', "%{$keyword}%")->orWhere('mobile', 'like', "%{$keyword}%")->orWhere('email', 'like', "%{$keyword}%");
             });
 
         $this->sortable($query);
@@ -144,6 +144,14 @@ class AdminUserService extends AdminService
         return false;
     }
 
+
+    /**
+     * 删除
+     *
+     * @param string $ids
+     *
+     * @return mixed
+     */
     public function delete(string $ids)
     {
         $exists = $this->query()

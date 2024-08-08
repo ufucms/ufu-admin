@@ -17,11 +17,6 @@ class AdminRoleController extends AdminController
     public function list(): Page
     {
         $crud = $this->baseCRUD()
-            ->headerToolbar([
-                $this->createButton(true),
-                ...$this->baseHeaderToolBar(),
-            ])
-            ->filterTogglable(false)
             ->itemCheckableOn('${slug !== "administrator"}')
             ->columns([
                 amis()->TableColumn()->label('ID')->name('id')->sortable(),

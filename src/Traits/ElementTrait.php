@@ -255,9 +255,8 @@ trait ElementTrait
     {
         $crud = amis()->CRUDTable()
             ->perPage(20)
-            ->alwaysShowPagination()
             ->affixHeader(false)
-            ->filterTogglable()
+            ->filterTogglable(false)
             ->filterDefaultVisible(false)
             ->api($this->getListGetDataPath())
             ->quickSaveApi($this->getQuickEditPath())
@@ -266,7 +265,6 @@ trait ElementTrait
             ->perPageAvailable([10, 20, 30, 50, 100, 200])
             ->footerToolbar(['switch-per-page', 'statistics', 'pagination'])
             ->headerToolbar([
-                $this->createButton(),
                 ...$this->baseHeaderToolBar(),
             ]);
 
@@ -285,8 +283,10 @@ trait ElementTrait
     protected function baseHeaderToolBar()
     {
         $schema = [
+            amis('reload')->align('left'),
+            $this->createButton(),
             'bulkActions',
-            amis('reload')->align('right'),
+            amis('columns-toggler')->align('right'),
             amis('filter-toggler')->align('right'),
         ];
 

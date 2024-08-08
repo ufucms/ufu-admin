@@ -4,11 +4,12 @@ namespace Slowlyo\OwlAdmin\Models;
 
 use Slowlyo\OwlAdmin\Admin;
 use Illuminate\Database\Eloquent\Model;
+use Slowlyo\OwlAdmin\Traits\StaticTrait;
 use Slowlyo\OwlAdmin\Traits\DatetimeFormatterTrait;
 
 class BaseModel extends Model
 {
-    use DatetimeFormatterTrait;
+    use StaticTrait, DatetimeFormatterTrait;
 
     public function __construct(array $attributes = [])
     {

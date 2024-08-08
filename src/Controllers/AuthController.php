@@ -5,7 +5,6 @@ namespace Slowlyo\OwlAdmin\Controllers;
 use Slowlyo\OwlAdmin\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Slowlyo\OwlAdmin\Support\Captcha;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use Slowlyo\OwlAdmin\Services\AdminUserService;
@@ -24,7 +23,7 @@ class AuthController extends AdminController
                 return $this->response()->fail(admin_trans('admin.required', ['attribute' => admin_trans('admin.captcha')]));
             }
 
-            if (strtolower(cache()->pull($request->sys_captcha)) != strtolower($request->captcha)) {
+            if (!captcha_api_check($request->captcha, $request->sys_captcha, 'math')) {
                 return $this->response()->fail(admin_trans('admin.captcha_error'));
             }
         }
@@ -191,14 +190,13 @@ JS,
      */
     public function reloadCaptcha()
     {
-        $captcha = new Captcha();
+        $captcha = app('captcha')->create('math', true);
+        $data = [
+            'captcha_img' => $captcha['img']??'',
+            'sys_captcha' => $captcha['key']??'',
+        ];
 
-        $captcha_img = $captcha->showImg();
-        $sys_captcha = uniqid('captcha:');
-
-        cache()->put($sys_captcha, $captcha->getCaptcha(), 600);
-
-        return $this->response()->success(compact('captcha_img', 'sys_captcha'));
+        return $this->response()->success($data);
     }
 
     public function logout(): \Illuminate\Http\JsonResponse|\Illuminate\Http\Resources\Json\JsonResource
@@ -219,7 +217,7 @@ JS,
             return $this->response()->success([]);
         }
 
-        $userInfo = Admin::user()->only(['name', 'avatar']);
+        $userInfo = Admin::user()->only(['name', 'avatar', 'mobile', 'email', 'birthday', 'gender']);
 
         $menus = amis()->DropdownButton()
             ->hideCaret()
@@ -247,6 +245,7 @@ JS,
 
     public function userSetting(): \Illuminate\Http\JsonResponse|\Illuminate\Http\Resources\Json\JsonResource
     {
+        $model = $this->serviceName::make()->getModel();
         $form = amis()->Form()
             ->title()
             ->panelClassName('px-48 m:px-0')
@@ -265,6 +264,10 @@ JS,
                     ->type('input-password')
                     ->label(admin_trans('admin.confirm_password'))
                     ->name('confirm_password'),
+                amis()->TextControl()->label(admin_trans('admin.admin_user.mobile'))->name('mobile')->type('input-number')->validations('isPhoneNumber'),
+                amis()->TextControl()->label(admin_trans('admin.admin_user.email'))->name('email')->type('input-email')->validations('isEmail'),
+                amis()->DateControl()->label(admin_trans('admin.admin_user.birthday'))->name('birthday')->format("YYYY-MM-DD"),
+                amis()->RadiosControl()->label(admin_trans('admin.admin_user.gender'))->name('gender')->options($model::filterData('genderOpt', 0))->inline(true),
             ]);
 
         return $this->response()->success(amis()->Page()->body($form));
@@ -279,6 +282,10 @@ JS,
                 'old_password',
                 'password',
                 'confirm_password',
+                'mobile',
+                'email',
+                'birthday',
+                'gender',
             ]));
 
         return $this->autoResponse($result);

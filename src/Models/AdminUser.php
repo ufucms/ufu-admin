@@ -7,13 +7,15 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Collection;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Foundation\Auth\User;
+use Stancl\VirtualColumn\VirtualColumn;
+use Slowlyo\OwlAdmin\Traits\StaticTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Slowlyo\OwlAdmin\Traits\DatetimeFormatterTrait;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
 class AdminUser extends User implements AuthenticatableContract
 {
-    use Authenticatable, HasApiTokens, DatetimeFormatterTrait;
+    use Authenticatable, HasApiTokens, VirtualColumn, StaticTrait, DatetimeFormatterTrait;
 
     protected $appends = ['administrator'];
     protected $guarded = [];
@@ -24,6 +26,53 @@ class AdminUser extends User implements AuthenticatableContract
 
         parent::__construct($attributes);
     }
+
+    public static function getCustomColumns(): array
+    {
+        return [
+            'id',
+            'username',
+            'password',
+            'mobile',
+            'name',
+            'gender',
+            'birthday',
+            'email',
+            'avatar',
+            'state',
+            'reason',
+            'remember_token',
+            'memo',
+    	    'created_at',
+    	    'updated_at',
+        ];
+    }
+
+    /**
+     * 性别选项
+     * 
+    **/
+    public static $genderDef = 0;
+    public static $genderOpt = [
+        [
+            'label' => '未知',
+            'value' => 0,
+            'color' => '#303540',
+            'icon'  => 'fa fa-genderless',
+        ],
+        [
+            'label' => '男',
+            'value' => 1,
+            'color' => '#2468f2',
+            'icon'  => 'fa fa-mars',
+        ],
+        [
+            'label' => '女',
+            'value' => 2,
+            'color' => '#f23d3d',
+            'icon'  => 'fa fa-venus',
+        ],
+    ];
 
     public function roles()
     {

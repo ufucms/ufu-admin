@@ -20,7 +20,7 @@ return [
     'route'          => [
         'prefix'               => env('ADMIN_ROUTE_PREFIX', 'admin-api'),
         'domain'               => env('ADMIN_DOMAIN'),
-        'namespace'            => 'App\\Admin\\Controllers',
+        'namespace'            => 'App\\Admin\\Http\\Controllers',
         'middleware'           => ['admin'],
         // 不包含额外路由, 配置后, 不会追加新增/详情/编辑页面路由
         'without_extra_routes' => [

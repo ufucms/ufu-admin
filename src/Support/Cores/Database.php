@@ -2,6 +2,7 @@
 
 namespace Slowlyo\OwlAdmin\Support\Cores;
 
+use Symfony\Component\Yaml\Yaml;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -45,37 +46,47 @@ class Database
     {
         $this->create('admin_users', function (Blueprint $table) {
             $table->id();
-            $table->string('username', 120)->unique();
-            $table->string('password', 80);
-            $table->tinyInteger('enabled')->default(1);
-            $table->string('name')->default('');
-            $table->string('avatar')->nullable();
-            $table->string('remember_token', 100)->nullable();
+            $table->string('username', 120)->unique()->comment('用户名');
+            $table->string('password', 80)->nullable()->comment('密码');
+            $table->string('mobile', 15)->index()->nullable()->comment('手机号');
+            $table->string('name', 30)->nullable()->comment('姓名');
+            $table->tinyInteger('gender')->index()->default(0)->comment('性别：0=未知,1=男,2=女');
+            $table->timestamp('birthday')->nullable()->comment('出生日期');
+            $table->string('email', 100)->nullable()->comment('电子邮箱');
+            $table->string('avatar', 240)->nullable()->comment('用户头像');
+            $table->string('remember_token', 100)->nullable()->comment('记住我');
+            $table->tinyInteger('enabled')->default(1)->comment('启用状态：0=已禁用,1=启用中');
+            $table->string('reason', 240)->nullable()->comment('原因');
+            $table->string('memo', 240)->nullable()->comment('备注');
+            $table->json('data')->nullable()->comment('虚拟列数据存储');
             $table->timestamps();
+            $table->comment('管理员表');
         });
 
         $this->create('admin_roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 50)->unique();
-            $table->string('slug', 50)->unique();
+            $table->id()->comment('ID');
+            $table->string('name', 50)->unique()->comment('角色名称');
+            $table->string('slug', 50)->unique()->comment('角色标识');
             $table->timestamps();
+            $table->comment('角色表');
         });
 
         $this->create('admin_permissions', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 50)->unique();
-            $table->string('slug', 50)->unique();
-            $table->text('http_method')->nullable();
-            $table->text('http_path')->nullable();
-            $table->integer('custom_order')->default(0);
-            $table->integer('parent_id')->default(0);
+            $table->id()->comment('ID');
+            $table->string('name', 50)->unique()->comment('权限名称');
+            $table->string('slug', 50)->unique()->comment('权限名称');
+            $table->text('http_method')->nullable()->comment('请求方法');
+            $table->text('http_path')->nullable()->comment('请求路径');
+            $table->integer('custom_order')->default(0)->comment('排序');
+            $table->integer('parent_id')->default(0)->comment('父级ID');
             $table->timestamps();
+            $table->comment('权限表');
         });
 
         $this->create('admin_menus', function (Blueprint $table) {
-            $table->id();
-            $table->integer('parent_id')->default(0);
-            $table->integer('custom_order')->default(0);
+            $table->id()->comment('ID');
+            $table->integer('parent_id')->default(0)->comment('父级ID');
+            $table->integer('custom_order')->default(0)->comment('排序');
             $table->string('title', 100)->comment('菜单名称');
             $table->string('icon', 100)->nullable()->comment('菜单图标');
             $table->string('url')->nullable()->comment('菜单路由');
@@ -89,27 +100,31 @@ class Database
             $table->string('extension')->nullable()->comment('扩展');
 
             $table->timestamps();
+            $table->comment('菜单表');
         });
 
         $this->create('admin_role_users', function (Blueprint $table) {
-            $table->integer('role_id');
-            $table->integer('user_id');
+            $table->integer('role_id')->comment('角色ID');
+            $table->integer('user_id')->comment('管理员ID');
             $table->index(['role_id', 'user_id']);
             $table->timestamps();
+            $table->comment('管理员角色表');
         });
 
         $this->create('admin_role_permissions', function (Blueprint $table) {
-            $table->integer('role_id');
-            $table->integer('permission_id');
+            $table->integer('role_id')->comment('角色ID');
+            $table->integer('permission_id')->comment('权限ID');
             $table->index(['role_id', 'permission_id']);
             $table->timestamps();
+            $table->comment('角色权限表');
         });
 
         $this->create('admin_permission_menu', function (Blueprint $table) {
-            $table->integer('permission_id');
-            $table->integer('menu_id');
+            $table->integer('permission_id')->comment('权限ID');
+            $table->integer('menu_id')->comment('菜单ID');
             $table->index(['permission_id', 'menu_id']);
             $table->timestamps();
+            $table->comment('权限菜单表');
         });
 
         // 如果是模块，跳过下面的表
@@ -118,7 +133,7 @@ class Database
         }
 
         $this->create('admin_code_generators', function (Blueprint $table) {
-            $table->id();
+            $table->id()->comment('ID');
             $table->string('title')->default('')->comment('名称');
             $table->string('table_name')->default('')->comment('表名');
             $table->string('primary_key')->default('id')->comment('主键名');
@@ -132,19 +147,22 @@ class Database
             $table->text('menu_info')->nullable()->comment('菜单信息');
             $table->text('page_info')->nullable()->comment('页面信息');
             $table->timestamps();
+            $table->comment('代码生成器表');
         });
 
         $this->create('admin_settings', function (Blueprint $table) {
-            $table->string('key')->default('');
-            $table->longText('values')->nullable();
+            $table->string('key', 190)->unique()->comment('配置项');
+            $table->longText('values')->nullable()->comment('配置值');
             $table->timestamps();
+            $table->comment('配置表');
         });
 
         $this->create('admin_extensions', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 100)->unique();
-            $table->tinyInteger('is_enabled')->default(0);
+            $table->id()->comment('ID');
+            $table->string('name', 100)->unique()->comment('扩展标识');
+            $table->tinyInteger('is_enabled')->default(0)->comment('是否启用：0=禁用,1=启用');
             $table->timestamps();
+            $table->comment('扩展表');
         });
 
         $this->create('admin_pages', function (Blueprint $table) {
@@ -174,6 +192,7 @@ class Database
             $table->tinyInteger('enabled')->default(1)->comment('是否启用');
             $table->longText('args')->comment('接口参数')->nullable();
             $table->timestamps();
+            $table->comment('动态API接口表');
         });
     }
 
@@ -205,7 +224,7 @@ class Database
      *
      * @return void
      */
-    public function fillInitialData()
+    public function fillInitialData($username = 'admin', $password = 'admin')
     {
         $data = function ($data) {
             foreach ($data as $k => $v) {
@@ -226,8 +245,8 @@ class Database
         // 创建初始用户
         $adminUser->truncate();
         $adminUser->insert($data([
-            'username' => 'admin',
-            'password' => bcrypt('admin'),
+            'username' => $username,
+            'password' => bcrypt($password),
             'name'     => 'Administrator',
         ]));
 

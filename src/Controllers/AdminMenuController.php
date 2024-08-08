@@ -29,8 +29,7 @@ class AdminMenuController extends AdminController
             ])
             ->loadDataOnce()
             ->syncLocation(false)
-            ->headerToolbar([$this->createButton(true, 'lg'), ...$this->baseHeaderToolBar()])
-            ->filterTogglable(false)
+            ->footerToolbar([])
             ->footerToolbar(['statistics'])
             ->bulkActions([$this->bulkDeleteButton()->reload('window')])
             ->columns([
